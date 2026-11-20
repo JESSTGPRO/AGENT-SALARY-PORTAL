@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#111;
+color:#fff;
+}
+
+.header{
+background:linear-gradient(90deg,#ff1493,#ff69b4);
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+color:#fff;
+box-shadow:0 0 15px #ff1493;
+}
+
+.profile{
+margin:15px;
+padding:20px;
+background:#1d1d1d;
+border:2px solid gold;
+border-radius:15px;
+text-align:center;
+}
+
+.profile img{
+width:80px;
+height:80px;
+border-radius:50%;
+background:#333;
+}
+
+.profile h2{
+margin-top:10px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+padding:15px;
+}
+
+.card{
+background:#1b1b1b;
+border:2px solid gold;
+border-radius:18px;
+padding:18px;
+box-shadow:0 0 18px rgba(255,215,0,.25);
+}
+
+.card h3{
+color:#ff69b4;
+margin-bottom:10px;
+}
+
+.card span{
+font-size:28px;
+font-weight:bold;
+color:gold;
+}
+
+.menu{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#000;
+display:flex;
+justify-content:space-around;
+padding:12px;
+border-top:2px solid gold;
+}
+
+.menu button{
+background:none;
+border:none;
+color:#fff;
+font-size:15px;
+cursor:pointer;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+}
+
+.stat{
+background:#1d1d1d;
+border:2px solid #ff69b4;
+border-radius:15px;
+padding:20px;
+text-align:center;
+}
+
+.stat h3{
+color:#ff69b4;
+margin-bottom:10px;
+}
+
+.stat span{
+font-size:28px;
+font-weight:bold;
+color:gold;
+}
+
+.bottomMenu{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#000;
+display:flex;
+border-top:2px solid gold;
+}
+
+.bottomMenu button{
+
+flex:1;
+padding:10px 5px;
+background:none;
+border:none;
+color:white;
+font-size:22px;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:3px;
+cursor:pointer;
+
+}
+
+.bottomMenu span{
+
+font-size:11px;
+color:#ffd700;
+
+}
+
+.bottomMenu button:hover{
+
+background:#222;
+text-shadow:0 0 10px gold;
+
+}
+
+.dashboard{
+display:flex;
+flex-direction:column;
+gap:18px;
+padding:15px;
+padding-bottom:90px;
+}
+
+.btn{
+width:100%;
+padding:16px;
+font-size:18px;
+font-weight:bold;
+border-radius:12px;
+background:linear-gradient(90deg,#ff1493,#ff9800);
+color:white;
+border:none;
+}
+
+.btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 15px gold;
+}
+
+.gameGrid{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.gameCard{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px;
+background:#222;
+border-radius:15px;
+border:1px solid gold;
+}
+
+.gameName{
+font-size:18px;
+font-weight:bold;
+}
+
+.gameProfit{
+font-size:26px;
+font-weight:bold;
+color:gold;
+}
+
+.stats.agentView{
+grid-template-columns:repeat(3,1fr);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+    <h1>👑 TEAM JESSTGPRO AGENTS 👑</h1>
+    <p>🃏 SALARY PORTAL 🃏</p>
+</div>
+
+<div class="dashboard">
+
+<div class="card">
+
+<h2>🎮 GAME PROFITS</h2>
+
+<div class="gameGrid">
+
+<div class="gameCard">
+<div class="gameName">🎨 Color Game</div>
+<div class="gameProfit" id="cgProfit">₱0</div>
+</div>
+
+<div class="gameCard">
+<div class="gameName">🎰 Bingo</div>
+<div class="gameProfit" id="bingoProfit">₱0</div>
+</div>
+
+<div class="gameCard">
+<div class="gameName">🎲 Slots</div>
+<div class="gameProfit" id="slotsProfit">₱0</div>
+</div>
+
+<div class="gameCard">
+<div class="gameName">💣 Mines</div>
+<div class="gameProfit" id="minesProfit">₱0</div>
+</div>
+
+<div class="gameCard">
+<div class="gameName">💎 Color Game Plus</div>
+<div class="gameProfit" id="cgPlusProfit">₱0</div>
+</div>
+
+<div class="gameCard">
+<div class="gameName">🐉 Tiger vs Dragon</div>
+<div class="gameProfit" id="tigerProfit">₱0</div>
+</div>
+
+<div class="gameCard">
+<div class="gameName">🃏 Sakla</div>
+<div class="gameProfit" id="saklaProfit">₱0</div>
+</div>
+
+<div class="card">
+
+<h2>📊 LIVE OVERVIEW</h2>
+
+<div class="stats">
+
+<div class="stat" id="liveAgentsCard">
+<h3 id="liveAgents">0</h3>
+<p>Agents</p>
+</div>
+
+<div class="stat">
+<h3 id="livePlayers">0</h3>
+<p>Players</p>
+</div>
+
+<div class="stat">
+<h3 id="liveActive">0</h3>
+<p>Active</p>
+</div>
+
+<div class="stat">
+<h3 id="liveInactive">0</h3>
+<p>Not Active</p>
+</div>
+
+<div class="stat" id="sameIPCard">
+<h3 id="liveSameIP">0</h3>
+<p>Same IP</p>
+</div>
+
+<div class="stat" id="sameDeviceCard">
+<h3 id="liveSameDevice">0</h3>
+<p>Same Device</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card" id="agentsCard">
+<h2>👥 Agents</h2>
+<p>Manage all agents</p>
+<button class="btn" onclick="openAgents()">Open</button>
+</div>
+
+<div class="card">
+<h2>🎮 Players</h2>
+<p>Manage player database</p>
+<button class="btn" onclick="openPlayers()">Open</button>
+</div>
+
+<div class="card">
+<h2>💰 Salary</h2>
+<p>Salary Management</p>
+<button class="btn" onclick="openSalary()">Open</button>
+</div>
+
+<div class="card">
+<h2>🚪 Logout</h2>
+<p>Exit Portal</p>
+<button class="btn" onclick="logout()">Logout</button>
+</div>
+
+<div class="profile">
+
+  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+
+  <h2 id="agentName">Loading...</h2>
+
+  <p id="agentId">Agent ID : ----</p>
+
+  <p id="agentRole">Role : ----</p>
+
+</div>
+
+<div class="stats" id="adminStats">
+
+  <div class="stat">
+    <h3 id="totalAgents">0</h3>
+    <p>Total Agents</p>
+  </div>
+
+  <div class="stat">
+    <h3 id="totalPlayers">0</h3>
+    <p>Total Players</p>
+  </div>
+
+  <div class="stat">
+    <h3 id="totalSalary">0</h3>
+    <p>Total Salary</p>
+  </div>
+
+</div>
+
+</div>
+
+<div class="bottomMenu">
+
+<button onclick="location.reload()">
+🏠
+<span>Home</span>
+</button>
+
+<button id="agentsMenu" onclick="openAgents()">
+👥
+<span>Agents</span>
+</button>
+
+<button onclick="openPlayers()">
+🎮
+<span>Players</span>
+</button>
+
+<button onclick="openSalary()">
+💰
+<span>Salary</span>
+</button>
+
+<button onclick="logout()">
+🚪
+<span>Exit</span>
+</button>
+
+</div>
+
+<script>
+
+function loadDashboard(){
+
+  google.script.run
+  .withSuccessHandler(function(data){
+
+    document.getElementById("totalAgents").innerHTML = data.totalAgents;
+    document.getElementById("totalPlayers").innerHTML = data.totalPlayers;
+    document.getElementById("totalSalary").innerHTML = data.totalSalary;
+
+  })
+  .getDashboardData();
+
+}
+
+function openAgents(){
+
+  google.script.run
+    .withSuccessHandler(function(html){
+
+      document.open();
+      document.write(html);
+      document.close();
+
+    })
+    .getAgentsPage(sessionStorage.getItem("agentId"));
+
+}
+
+function openPlayers(){
+
+  google.script.run
+    .withSuccessHandler(function(html){
+
+      document.open();
+      document.write(html);
+      document.close();
+
+    })
+    .getPlayersPage();
+
+}
+
+function openSalary(){
+
+  google.script.run
+    .withSuccessHandler(function(html){
+
+      document.open();
+      document.write(html);
+      document.close();
+
+    })
+    .getSalaryPage();
+
+}
+
+function loadProfile(){
+
+  google.script.run
+  .withSuccessHandler(function(data){
+
+    document.getElementById("agentName").innerHTML = data.name;
+
+    document.getElementById("agentId").innerHTML =
+      "Agent ID : " + data.id;
+
+    document.getElementById("agentRole").innerHTML =
+      "Role : " + data.role;
+
+if(String(data.role).toLowerCase() != "admin"){
+
+  document.getElementById("agentsCard").style.display = "none";
+  document.getElementById("agentsMenu").style.display = "none";
+  document.getElementById("adminStats").style.display = "none";
+
+  // Live Overview (Admin only)
+  document.getElementById("liveAgentsCard").style.display = "none";
+  document.getElementById("sameIPCard").style.display = "none";
+  document.getElementById("sameDeviceCard").style.display = "none";
+
+}
+
+  })
+  .getAgentProfile(sessionStorage.getItem("agentId"));
+
+}
+
+function loadPlayerStats(){
+
+  google.script.run
+  .withSuccessHandler(function(data){
+
+    document.getElementById("active").innerHTML =
+    data.activePlayers;
+
+    document.getElementById("players").innerHTML =
+    data.totalPlayers;
+
+  })
+  .getPlayerStats(document.getElementById("agentId").innerText.replace("Agent ID : ",""));
+
+}
+
+function loadHandsSalary(){
+
+  let agentId = sessionStorage.getItem("agentId");
+
+  google.script.run
+  .withSuccessHandler(function(data){
+
+    document.getElementById("handsSalary").innerHTML =
+    "₱" + data.salary;
+
+  })
+  .getHandsSalary(agentId);
+
+}
+
+function loadTotalSalary(){
+
+  google.script.run
+  .withSuccessHandler(function(data){
+
+    document.getElementById("salary").innerHTML =
+    "₱" + data.totalSalary;
+
+  })
+.getAgentTotalSalary(sessionStorage.getItem("agentId"));
+
+}
+
+function loadGameProfits(){
+
+google.script.run
+.withSuccessHandler(function(data){
+
+document.getElementById("cgProfit").innerHTML =
+"₱"+Number(data.colorGame).toLocaleString();
+
+document.getElementById("bingoProfit").innerHTML =
+"₱"+Number(data.bingo).toLocaleString();
+
+document.getElementById("slotsProfit").innerHTML =
+"₱"+Number(data.slots).toLocaleString();
+
+document.getElementById("minesProfit").innerHTML =
+"₱"+Number(data.mines).toLocaleString();
+
+document.getElementById("cgPlusProfit").innerHTML =
+"₱"+Number(data.colorGamePlus).toLocaleString();
+
+document.getElementById("tigerProfit").innerHTML =
+"₱"+Number(data.tiger).toLocaleString();
+
+document.getElementById("saklaProfit").innerHTML =
+"₱"+Number(data.sakla).toLocaleString();
+
+})
+.getGameProfits();
+
+}
+
+loadGameProfits();
+
+// Auto refresh every 30 seconds
+setInterval(loadGameProfits,30000);
+
+function logout(){
+
+  sessionStorage.clear();
+
+  google.script.run
+  .withSuccessHandler(function(html){
+
+    document.open();
+    document.write(html);
+    document.close();
+
+  })
+  .include("index");
+
+}
+
+function loadLiveOverview(){
+
+google.script.run
+.withSuccessHandler(function(data){
+
+document.getElementById("liveAgents").innerHTML = data.totalAgents;
+
+document.getElementById("livePlayers").innerHTML = data.totalPlayers;
+
+document.getElementById("liveActive").innerHTML = data.activePlayers;
+
+document.getElementById("liveInactive").innerHTML = data.notActivePlayers;
+
+document.getElementById("liveSameIP").innerHTML = data.sameIP;
+
+document.getElementById("liveSameDevice").innerHTML = data.sameDevice;
+
+})
+.getLiveOverview(
+ sessionStorage.getItem("agentId"),
+ sessionStorage.getItem("role")
+)
+
+}
+
+loadDashboard();
+loadProfile();
+loadLiveOverview();
+setInterval(loadLiveOverview,30000);
+document.querySelector(".stats").classList.add("agentView");
+
+// loadPlayerStats();
+// loadHandsSalary();
+// loadTotalSalary();
+
+</script>
+
+</body>
+</html>
