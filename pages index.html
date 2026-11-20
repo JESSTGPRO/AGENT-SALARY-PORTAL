@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+
+<style>
+
+body{
+margin:0;
+padding:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#0b0b0b,#2b0033,#111);
+overflow:hidden;
+}
+
+.login-box{
+
+width:92%;
+max-width:500px;
+padding:40px 30px;
+background:rgba(0,0,0,.75);
+border:2px solid gold;
+border-radius:25px;
+text-align:center;
+backdrop-filter:blur(12px);
+
+box-shadow:
+0 0 20px gold,
+0 0 40px #ff00cc;
+
+animation:fadeIn .8s ease;
+
+position:relative;
+overflow:hidden;
+
+}
+
+.login-box h2{
+margin-bottom:25px;
+font-size:34px;
+color:#ff4fc3;
+text-shadow:
+0 0 10px #ff00cc,
+0 0 20px gold;
+}
+
+input{
+width:100%;
+padding:18px;
+margin:12px 0;
+border-radius:50px;
+border:2px solid #ff4fc3;
+background:#111;
+color:#fff;
+font-size:20px;
+box-sizing:border-box;
+outline:none;
+transition:.3s;
+}
+
+input:focus{
+border-color:gold;
+box-shadow:0 0 15px gold;
+}
+
+button{
+width:100%;
+padding:18px;
+margin-top:15px;
+border:none;
+border-radius:50px;
+cursor:pointer;
+font-size:22px;
+font-weight:bold;
+color:#fff;
+background:linear-gradient(90deg,#ff0088,#ff5ebc);
+box-shadow:
+0 0 15px #ff00cc,
+0 0 25px gold;
+transition:.3s;
+}
+
+button:hover{
+transform:scale(1.03);
+box-shadow:
+0 0 25px #ff00cc,
+0 0 45px gold;
+}
+
+#msg{
+margin-top:15px;
+font-size:15px;
+color:#ff8080;
+font-weight:bold;
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(25px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+.logo{
+    margin-bottom:25px;
+}
+
+.logo h1{
+    color:#ff4fc3;
+    font-size:32px;
+    margin:5px 0;
+    text-shadow:0 0 10px #ff00cc,0 0 20px gold;
+}
+
+.logo span{
+    color:gold;
+    font-size:14px;
+    letter-spacing:3px;
+}
+
+.crown{
+    font-size:48px;
+    animation:float 3s ease-in-out infinite;
+}
+
+body::before{
+    content:"♠ ♥ ♦ ♣";
+    position:fixed;
+    top:10%;
+    left:5%;
+    font-size:100px;
+    opacity:.30;
+    color:gold;
+    animation:float 6s ease-in-out infinite;
+}
+
+body::after{
+    content:"💎 🎰 💰";
+    position:fixed;
+    bottom:8%;
+    right:5%;
+    font-size:100px;
+    opacity:.30;
+    animation:float2 7s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+}
+
+@keyframes float2{
+    0%,100%{transform:translateY(0) rotate(0deg);}
+    50%{transform:translateY(-15px) rotate(10deg);}
+}
+
+.logo-title{
+
+font-size:34px;
+font-weight:bold;
+color:#ff4fc3;
+text-shadow:
+0 0 10px #ff00cc,
+0 0 20px gold;
+
+}
+
+.logo-sub{
+
+margin-top:5px;
+margin-bottom:25px;
+color:gold;
+font-size:15px;
+letter-spacing:2px;
+
+}
+
+.password-box{
+
+position:relative;
+
+}
+
+.togglePass{
+
+position:absolute;
+
+right:18px;
+
+top:50%;
+
+transform:translateY(-50%);
+
+cursor:pointer;
+
+font-size:20px;
+
+color:white;
+
+}
+
+.tagline{
+
+margin-top:20px;
+
+color:gold;
+
+font-size:18px;
+
+font-style:italic;
+
+}
+
+.login-banner{
+
+width:100%;
+max-width:420px;
+display:block;
+margin:auto;
+margin-bottom:15px;
+
+filter:
+drop-shadow(0 0 10px gold)
+drop-shadow(0 0 20px #ff00cc);
+
+animation:floatBanner 3s ease-in-out infinite;
+
+}
+
+@keyframes floatBanner{
+
+0%,100%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-8px);
+}
+
+}
+
+.login-box::before{
+
+content:"";
+
+position:absolute;
+
+top:-50%;
+left:-50%;
+
+width:200%;
+height:200%;
+
+background:
+
+linear-gradient(
+45deg,
+transparent,
+rgba(255,215,0,.35),
+transparent);
+
+animation:borderRotate 6s linear infinite;
+
+pointer-events:none;
+
+}
+
+@keyframes borderRotate{
+
+100%{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+.login-box::before{
+z-index:0;
+}
+
+.login-box > *{
+position:relative;
+z-index:2;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="login-box">
+
+<div class="logo-area">
+
+<img
+class="login-banner"
+src="https://i.ibb.co/C37G99Dd/3-B017-CA4-D98-A-47-C1-87-A4-CE11-B7-B1-B222.png"
+alt="TEAM JESSTGPRO Logo">
+
+<div class="logo-sub">
+CASHINO LDW
+9824085
+</div>
+
+</div>
+
+<input
+id="agentId"
+placeholder="👤 Agent ID">
+
+<div class="password-box">
+
+<input
+id="password"
+type="password"
+placeholder="🔒 Password">
+
+<span
+class="togglePass"
+onclick="togglePassword()">
+👁
+</span>
+
+</div>
+
+<button onclick="login()">
+
+🚀 LOGIN
+
+</button>
+
+<div id="msg"></div>
+
+<div class="tagline">
+
+✨ Play • Win • Earn ✨
+
+</div>
+
+</div>
+
+
+
+<script>
+
+function togglePassword(){
+
+let p=document.getElementById("password");
+
+if(p.type=="password"){
+
+p.type="text";
+
+}else{
+
+p.type="password";
+
+}
+
+}
+
+function login(){
+
+let agentId =
+document.getElementById("agentId").value;
+
+let password =
+document.getElementById("password").value;
+
+
+google.script.run
+.withSuccessHandler(function(res){
+
+    if(res.success){
+
+        sessionStorage.setItem("agentId", res.agentId);
+
+        sessionStorage.setItem("role", res.role);
+
+        sessionStorage.setItem("salaryBase", res.salaryBase);
+
+        google.script.run
+        .withSuccessHandler(function(html){
+
+            document.open();
+            document.write(html);
+            document.close();
+
+        })
+        .getDashboard();
+
+    } else {
+
+        document.getElementById("msg").innerHTML =
+        "Invalid Agent ID or Password";
+
+    }
+
+})
+.login(agentId,password);
+
+
+}
+
+</script>
+
+
+</body>
+</html>
