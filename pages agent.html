@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+
+<style>
+
+*{
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  margin:0;
+  padding:20px;
+  background:#111;
+  color:white;
+}
+
+
+h2{
+  text-align:center;
+  color:#ff69b4;
+  text-shadow:0 0 10px #ff1493;
+}
+
+
+.card{
+
+  background:#1d1d1d;
+  border:2px solid gold;
+  border-radius:15px;
+  padding:20px;
+  margin-top:20px;
+  box-shadow:0 0 15px rgba(255,215,0,.3);
+
+}
+
+
+h3{
+  color:gold;
+}
+
+
+input,select{
+
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:8px;
+  border:1px solid gold;
+  background:#222;
+  color:white;
+
+}
+
+
+button{
+
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(45deg,#ffd700,#ff69b4);
+  color:black;
+  font-weight:bold;
+  cursor:pointer;
+
+}
+
+
+button:hover{
+
+  transform:scale(1.03);
+  box-shadow:0 0 15px gold;
+
+}
+
+
+.delete{
+
+  background:#ff1744;
+  color:white;
+
+}
+
+
+table{
+
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+
+}
+
+
+th{
+
+  background:#ff1493;
+  color:white;
+  padding:10px;
+
+}
+
+
+td{
+
+  background:#222;
+  border-bottom:1px solid #555;
+  padding:10px;
+  text-align:center;
+
+}
+
+
+@media(max-width:600px){
+
+table{
+
+font-size:12px;
+
+}
+
+button{
+
+font-size:14px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<button onclick="goBack()">⬅ Back to Dashboard</button>
+
+<h2>👥 AGENT MANAGEMENT</h2>
+
+
+<div class="card">
+
+<h3>Add Agent</h3>
+
+<input 
+id="searchAgent" 
+placeholder="🔍 Search Agent..."
+onkeyup="searchAgent()">
+
+<input id="agentId" placeholder="Agent ID">
+
+<input id="name" placeholder="Agent Name">
+
+<input id="password" type="password" placeholder="Password">
+
+
+<select id="role">
+<option value="AGENT">AGENT</option>
+<option value="ADMIN">ADMIN</option>
+</select>
+
+<select id="salaryBase">
+    <option value="PROFIT">PROFIT SALARY</option>
+    <option value="ACTIVE">ACTIVE SALARY</option>
+</select>
+
+
+<button onclick="addAgent()">
+ADD AGENT
+</button>
+
+
+</div>
+
+
+
+<div class="card">
+
+<h3>Agent List</h3>
+
+<div style="display:flex;gap:10px;margin-bottom:15px;">
+
+<button onclick="filterAgents('PROFIT')">
+💰 PROFIT SALARY
+</button>
+
+<button onclick="filterAgents('ACTIVE')">
+👥 ACTIVE SALARY
+</button>
+
+<button onclick="loadAgents()">
+📋 ALL AGENTS
+</button>
+
+</div>
+
+<input 
+id="searchAgent"
+placeholder="🔍 Search Agent..."
+onkeyup="searchAgent()">
+
+<table>
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Role</th>
+<th>Salary Base</th>
+<th>Action</th>
+</tr>
+</thead>
+
+
+<tbody id="agentTable"></tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+<script>
+
+
+function loadAgents(){
+
+google.script.run
+.withSuccessHandler(function(data){
+
+window.agentData = data;
+
+let html="";
+
+data.forEach(function(row){
+
+html += `
+
+<tr>
+<td>${row[0]}</td>
+<td>${row[1]}</td>
+<td>${row[3]}</td>
+<td>${row[4] || "-"}</td>
+<td>
+
+<button class="delete"
+onclick="deleteAgent('${row[0]}')">
+DELETE
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+
+document.getElementById("agentTable").innerHTML = html;
+
+
+})
+.getAgents();
+
+
+}
+
+
+
+function addAgent(){
+
+let id=document.getElementById("agentId").value;
+let name=document.getElementById("name").value;
+let pass=document.getElementById("password").value;
+let role=document.getElementById("role").value;
+let salaryBase = document.getElementById("salaryBase").value;
+
+
+google.script.run
+.withSuccessHandler(function(){
+
+alert("Agent Added");
+
+loadAgents();
+
+})
+.addAgent(id,name,pass,role,salaryBase);
+
+}
+
+function searchAgent(){
+
+let keyword = 
+document.getElementById("searchAgent").value.toLowerCase();
+
+let html="";
+
+
+if(!window.agentData){
+  return;
+}
+
+
+window.agentData.forEach(function(row){
+
+if(
+String(row[0]).toLowerCase().includes(keyword) ||
+String(row[1]).toLowerCase().includes(keyword)
+){
+
+html += `
+
+<tr>
+<td>${row[0]}</td>
+<td>${row[1]}</td>
+<td>${row[3]}</td>
+<td>${row[4] || "-"}</td>
+<td>
+
+<button class="delete"
+onclick="deleteAgent('${row[0]}')">
+DELETE
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+});
+
+
+document.getElementById("agentTable").innerHTML = html;
+
+}
+
+function filterAgents(type){
+
+    let html="";
+
+    window.agentData.forEach(function(row){
+
+        if(String(row[4]).toUpperCase() == type){
+
+            html += `
+            <tr>
+                <td>${row[0]}</td>
+                <td>${row[1]}</td>
+                <td>${row[3]}</td>
+                <td>${row[4]}</td>
+                <td>
+                    <button class="delete"
+                    onclick="deleteAgent('${row[0]}')">
+                    DELETE
+                    </button>
+                </td>
+            </tr>
+            `;
+
+        }
+
+    });
+
+    document.getElementById("agentTable").innerHTML = html;
+
+}
+
+function deleteAgent(id){
+
+if(confirm("Delete this agent?")){
+
+
+google.script.run
+.withSuccessHandler(function(){
+
+alert("Deleted");
+
+loadAgents();
+
+})
+.deleteAgent(id);
+
+
+}
+
+
+}
+
+
+loadAgents();
+
+function goBack(){
+
+  google.script.run
+    .withSuccessHandler(function(html){
+
+      document.open();
+      document.write(html);
+      document.close();
+
+    })
+    .getDashboard();
+
+}
+
+</script>
+
+
+</body>
+</html>
