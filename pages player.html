@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+
+<style>
+
+body{
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  padding:20px;
+  color:white;
+}
+
+.dashboard-card{
+background:#1f1f1f;
+border:2px solid #00e5ff;
+border-radius:15px;
+padding:18px;
+text-align:center;
+box-shadow:0 0 15px rgba(0,255,255,.2);
+}
+
+.dashboard-card h3{
+color:#ccc;
+font-size:15px;
+margin-bottom:10px;
+}
+
+.dashboard-card h1{
+font-size:34px;
+color:#00e676;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:8px;
+  border:1px solid #555;
+  background:#111827;
+  color:white;
+  box-sizing:border-box;
+}
+
+button{
+  background:linear-gradient(90deg,#ff1493,#ff69b4);
+  color:white;
+  border:none;
+  padding:10px 18px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+button:hover{
+  transform:scale(1.03);
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+  background:#111827;
+}
+
+th{
+  background:gold;
+  color:black;
+  padding:12px;
+}
+
+td{
+  border:1px solid #444;
+  padding:10px;
+  color:white;
+}
+
+.dashboard{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:15px;
+margin:20px 0;
+}
+
+.card{
+background:#1f1f1f;
+border-radius:15px;
+padding:18px;
+text-align:center;
+box-shadow:0 0 15px rgba(0,255,255,.2);
+}
+
+.card h3{
+color:#ccc;
+font-size:15px;
+margin-bottom:10px;
+}
+
+.card h1{
+font-size:34px;
+color:#00e676;
+}
+
+</style>
+</head>
+
+<body>
+
+<button onclick="goBack()">⬅ Back to Dashboard</button>
+
+<h2>🎮 PLAYER MANAGEMENT</h2>
+
+<input 
+id="searchPlayer"
+placeholder="🔍 Search Player..."
+onkeyup="searchPlayer()">
+
+<div class="card" id="addPlayerCard">
+
+<input id="agentId" placeholder="Agent ID">
+
+<input id="playerId" placeholder="Player ID">
+
+<input id="playerName" placeholder="Player Name">
+
+<input id="hands" type="number" placeholder="Hands">
+
+
+<select id="ipStatus">
+  <option value="NORMAL">NORMAL IP</option>
+  <option value="SAME IP">⚠️ SAME IP</option>
+</select>
+
+
+<select id="deviceStatus">
+  <option value="NORMAL">NORMAL DEVICE</option>
+  <option value="SAME DEVICE">⚠️ SAME DEVICE</option>
+</select>
+
+
+<button onclick="addPlayer()">ADD PLAYER</button>
+
+</div>
+
+<div class="dashboard">
+
+    <div class="dashboard-card">
+        <h3>Total Players</h3>
+        <h1 id="totalPlayers">0</h1>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Active</h3>
+        <h1 id="activePlayers">0</h1>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Not Active</h3>
+        <h1 id="inactivePlayers">0</h1>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Same IP</h3>
+        <h1 id="sameIP">0</h1>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Same Device</h3>
+        <h1 id="sameDevice">0</h1>
+    </div>
+
+</div>
+
+<div class="dashboard-card">
+
+<table>
+
+<thead>
+<tr>
+  <th>Player</th>
+  <th>UID</th>
+  <th>Hands</th>
+  <th>Status</th>
+  <th>Same IP</th>
+  <th>Same Device</th>
+</tr>
+</thead>
+
+<tbody id="playerTable"></tbody>
+
+</table>
+
+</div>
+
+<script>
+
+function loadPlayers(){
+
+  google.script.run
+  .withSuccessHandler(function(data){
+
+    window.playerData = data;
+
+    let html = "";
+
+    let total = data.length;
+    let active = data.filter(player => Number(player.hands) >= 100).length;
+    let inactive = data.filter(player => Number(player.hands) < 100).length;
+    let sameIP = data.filter(player => player.ip == "SAME IP").length;
+    let sameDevice = data.filter(player => player.device == "SAME DEVICE").length;
+
+    document.getElementById("totalPlayers").innerHTML = total;
+    document.getElementById("activePlayers").innerHTML = active;
+    document.getElementById("inactivePlayers").innerHTML = inactive;
+    document.getElementById("sameIP").innerHTML = sameIP;
+    document.getElementById("sameDevice").innerHTML = sameDevice;
+
+    data.forEach(function(row){
+
+      html += `
+      <tr>
+        <td>${row.playerName}</td>
+        <td>${row.playerId}</td>
+        <td>${row.hands}</td>
+        <td>${getPlayerStatus(row.hands)}</td>
+        <td>${row.ip}</td>
+        <td>${row.device}</td>
+      </tr>
+      `;
+
+    });
+
+    document.getElementById("playerTable").innerHTML = html;
+
+  })
+  .withFailureHandler(function(err){
+
+    alert("ERROR: " + err);
+
+  })
+  .getPlayers(
+    sessionStorage.getItem("agentId"),
+    sessionStorage.getItem("role")
+  );
+
+}
+
+function addPlayer(){
+
+let agent=document.getElementById("agentId").value;
+let id=document.getElementById("playerId").value;
+let name=document.getElementById("playerName").value;
+let hands=document.getElementById("hands").value;
+
+let ipStatus = document.getElementById("ipStatus").value;
+let deviceStatus = document.getElementById("deviceStatus").value;
+
+
+google.script.run
+.withSuccessHandler(function(){
+
+alert("Player Added");
+
+loadPlayers();
+
+})
+.addPlayer(
+agent,
+id,
+name,
+hands,
+ipStatus,
+deviceStatus
+);
+
+}
+
+function searchPlayer(){
+
+let keyword =
+document.getElementById("searchPlayer").value.toLowerCase();
+
+let html="";
+
+
+window.playerData.forEach(function(row){
+
+if(
+String(row.playerName).toLowerCase().includes(keyword) ||
+String(row.playerId).toLowerCase().includes(keyword) ||
+String(row.agentId).toLowerCase().includes(keyword)
+){
+
+html += `
+
+<tr>
+
+<td>${row.playerName}</td>
+
+<td>${row.playerId}</td>
+
+<td>${row.hands}</td>
+
+<td>
+${
+Number(row.hands) >= 100
+?
+'<span style="color:#00e676">🟢 Active</span>'
+:
+'<span style="color:#ff1744">🔴 Not Active</span>'
+}
+</td>
+
+<td>${row.ip}</td>
+
+<td>${row.device}</td>
+
+</tr>
+
+`;
+
+}
+
+});
+
+
+document.getElementById("playerTable").innerHTML = html;
+
+}
+
+function checkRole(){
+
+let role = sessionStorage.getItem("role");
+
+if(String(role).toLowerCase() != "admin"){
+
+document.getElementById("addPlayerCard").style.display="none";
+
+}
+
+}
+
+
+function goBack(){
+
+  google.script.run
+    .withSuccessHandler(function(html){
+
+      document.open();
+      document.write(html);
+      document.close();
+
+    })
+    .getDashboard();
+
+}
+
+function getPlayerStatus(hands){
+
+  if(Number(hands) >= 100){
+    return '<span style="color:#00e676;font-weight:bold;">🟢 ACTIVE</span>';
+  }
+
+  if(Number(hands) == 0){
+    return '<span style="color:#ff3b30;font-weight:bold;">🔴 NOT ACTIVE</span>';
+  }
+
+  return '<span style="color:#ff9500;font-weight:bold;">🟠 NOT ACTIVE</span>';
+
+}
+
+window.onload = function(){
+
+  checkRole();
+  loadPlayers();
+
+};
+
+</script>
+
+</body>
+</html>
