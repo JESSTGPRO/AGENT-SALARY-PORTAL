@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+
+<style>
+
+Ipinadala mo
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#050b08,#0b1612,#050b08);
+  color:#fff;
+  padding:20px;
+}
+
+/* ================= CARD ================= */
+
+.card{
+  background:#0d1411;
+  border:2px solid #00ff66;
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:
+    0 0 10px rgba(0,255,102,.35),
+    inset 0 0 15px rgba(0,255,102,.08);
+}
+
+h2,h3{
+  color:#7dffbf;
+  margin-bottom:12px;
+  text-shadow:0 0 8px rgba(0,255,153,.4);
+}
+
+/* ================= SEARCH ================= */
+
+input{
+  width:100%;
+  padding:12px;
+  margin:12px 0;
+  border-radius:10px;
+  border:2px solid #00ff66;
+  background:#08110d;
+  color:#fff;
+  font-size:15px;
+}
+
+input:focus{
+  outline:none;
+  box-shadow:0 0 12px rgba(0,255,102,.45);
+}
+
+/* ================= BUTTON ================= */
+
+button,
+.payroll-btn{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(90deg,#00994d,#00ff66);
+  color:#001b0f;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.25s;
+}
+
+button:hover,
+.payroll-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 18px rgba(0,255,102,.45);
+}
+
+/* ================= AGENT CARD ================= */
+
+.game-box{
+  background:#0b1210;
+  border:2px solid #00ff66;
+  border-radius:18px;
+  padding:18px;
+  margin:25px 0;
+  box-shadow:
+      0 0 12px rgba(0,255,102,.25),
+      inset 0 0 12px rgba(0,255,102,.05);
+}
+
+/* ================= AGENT HEADER ================= */
+
+.game-title{
+  background:linear-gradient(90deg,#04311f,#066d44);
+  color:#b6ffe1;
+  padding:14px;
+  border-radius:12px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  border:2px solid #00ff66;
+  text-shadow:0 0 10px rgba(0,255,153,.8);
+  margin-bottom:20px;
+}
+
+/* ================= GAME TITLE ================= */
+
+.single-game{
+  margin-bottom:25px;
+}
+
+.game-name{
+  color:#7dffbf;
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:8px;
+  text-shadow:0 0 8px rgba(0,255,153,.6);
+}
+
+/* ================= TABLE ================= */
+
+.salary-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  border:2px solid #00ff66;
+  border-radius:14px;
+  overflow:hidden;
+  background:#08110d;
+}
+
+.salary-table th{
+  background:#053520;
+  color:#b6ffe1;
+  padding:12px;
+  font-size:14px;
+  border-bottom:2px solid #00ff66;
+  text-align:center;
+  text-shadow:0 0 8px rgba(0,255,153,.8);
+}
+
+.salary-table td{
+  background:#111827;
+  color:#fff;
+  padding:12px;
+  text-align:center;
+  border-top:1px solid rgba(0,255,102,.25);
+}
+
+.highlight{
+  color:#7dffbf;
+  font-weight:bold;
+  text-shadow:0 0 6px rgba(0,255,153,.7);
+}
+
+/* ================= SUMMARY ================= */
+
+.salary-summary{
+  margin-top:20px;
+  padding:16px;
+  border-radius:12px;
+  border:2px solid #00ff66;
+  background:#08110d;
+  box-shadow:0 0 10px rgba(0,255,102,.2);
+}
+
+.salary-summary div{
+  display:flex;
+  justify-content:space-between;
+  margin:10px 0;
+}
+
+.salary-summary span{
+  color:#d1d5db;
+}
+
+.salary-summary strong{
+  color:#7dffbf;
+  font-size:18px;
+}
+
+/* ================= DETAILS CARD ================= */
+
+#salaryDetails{
+  border:2px solid #00ff66;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px){
+
+  body{
+    padding:10px;
+  }
+
+  .game-title{
+    font-size:16px;
+  }
+
+  .game-name{
+    font-size:15px;
+  }
+
+  .salary-table th,
+  .salary-table td{
+    padding:8px;
+    font-size:12px;
+  }
+
+  button,
+  .payroll-btn{
+    font-size:14px;
+    padding:12px;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<button onclick="goBack()">⬅ Back to Dashboard</button>
+
+<div class="card">
+
+<h2>💰 Salary Management</h2>
+
+<div id="salaryMenu">
+
+<button onclick="openProfitBased()">
+💰 PROFIT BASED
+</button>
+
+<br><br>
+
+<button onclick="openActiveBased()">
+👥 ACTIVE BASED
+</button>
+
+</div>
+
+<div id="profitSection" style="display:none;">
+
+<input
+id="searchSalary"
+placeholder="🔍 Search Profit Based Agent..."
+onkeyup="searchSalary()">
+
+<div id="salaryTable"></div>
+
+</div>
+
+<div id="activeSection" style="display:none;">
+
+<h3>👥 Active Based Salary</h3>
+
+<p>Active Based Salary Module (Coming Next Step)</p>
+
+</div>
+
+</div>
+
+<div class="card" id="salaryDetails" style="display:none; margin-top:20px;">
+
+<h3>💰 Salary Details</h3>
+
+<p><b>Agent ID:</b> <span id="dAgent"></span></p>
+
+<p><b>Overall Salary:</b> ₱<span id="dSalary"></span></p>
+
+</div>
+
+<script>
+
+function goBack(){
+
+  google.script.run
+  .withSuccessHandler(function(html){
+
+    document.open();
+    document.write(html);
+    document.close();
+
+  })
+  .getDashboard();
+
+}
+
+window.onload = function(){
+
+  const role = sessionStorage.getItem("role");
+  const salaryBase = sessionStorage.getItem("salaryBase");
+
+  // Admin = parehong button
+  if(String(role).toLowerCase() == "admin"){
+    return;
+  }
+
+  // Profit Agent
+  if(String(salaryBase).toUpperCase() == "PROFIT"){
+    document.querySelector('button[onclick="openActiveBased()"]').style.display = "none";
+  }
+
+  // Active Agent
+  if(String(salaryBase).toUpperCase() == "ACTIVE"){
+    document.querySelector('button[onclick="openProfitBased()"]').style.display = "none";
+  }
+
+};
+
+function openProfitBased() {
+
+  document.getElementById("salaryMenu").style.display = "none";
+  document.getElementById("profitSection").style.display = "block";
+
+  loadSalary();
+
+}
+
+function openActiveBased(){
+
+  document.getElementById("salaryMenu").style.display = "none";
+  document.getElementById("activeSection").style.display = "block";
+
+  loadActiveSalary();
+
+}
+
+function loadSalary(){
+
+google.script.run
+.withSuccessHandler(function(data){
+
+window.salaryData = data;
+
+let html = "";
+
+data.forEach(function(item){
+
+html += `
+<div class="game-box">
+
+<div class="game-title">
+🆔 AGENT ID : ${item.agentId}
+<br>
+💼 SALARY BASE : ${item.salaryBase}
+</div>
+
+
+${createGameTable("🎮 CG",
+item.cgProfit,
+item.cgShare,
+item.cgPercent,
+item.cgSalary)}
+
+
+${createGameTable("🎰 BINGO",
+item.bingoProfit,
+item.bingoShare,
+item.bingoPercent,
+item.bingoSalary)}
+
+
+${createGameTable("🎰 SLOTS",
+item.slotsProfit,
+item.slotsShare,
+item.slotsPercent,
+item.slotsSalary)}
+
+
+${createGameTable("🎯 MINES",
+item.minesProfit,
+item.minesShare,
+item.minesPercent,
+item.minesSalary)}
+
+
+${createGameTable("🐉 DRAGON",
+item.dragonProfit,
+item.dragonShare,
+item.dragonPercent,
+item.dragonSalary)}
+
+
+${createGameTable("🃏 CGP",
+item.cgpProfit,
+item.cgpShare,
+item.cgpPercent,
+item.cgpSalary)}
+
+
+${createGameTable("🎴 SAKLA",
+item.saklaProfit,
+item.saklaShare,
+item.saklaPercent,
+item.saklaSalary)}
+
+
+
+<div class="salary-summary">
+
+<div class="summary-row">
+<span>💰 Profit Salary</span>
+<strong>₱${item.profitSalary}</strong>
+</div>
+
+<div class="summary-row">
+<span>🎁 Bonus</span>
+<strong>₱${item.bonus}</strong>
+</div>
+
+<div class="summary-total">
+<span>🏆 Overall Salary</span>
+<strong>₱${item.totalSalary}</strong>
+</div>
+
+</div>
+
+
+<button class="payroll-btn"
+onclick="showSalary(
+'${item.agentId}',
+'${item.totalSalary}'
+)">
+👁 VIEW PAYROLL
+</button>
+
+
+</div>
+
+`;
+
+});
+
+
+document.getElementById("salaryTable").innerHTML = html;
+
+
+})
+.getSalaryComputation(
+sessionStorage.getItem("agentId"),
+sessionStorage.getItem("role")
+);
+
+}
+
+
+
+function createGameTable(game,profit,share,percent,salary){
+
+return `
+
+<div class="single-game">
+
+<div class="game-name">
+${game}
+</div>
+
+
+<table class="salary-table">
+
+<tr>
+
+<th>PROFIT</th>
+<th>90% SHARE</th>
+<th>RATE</th>
+<th>SALARY</th>
+
+</tr>
+
+
+<tr>
+
+<td class="highlight">
+₱${profit}
+</td>
+
+<td class="highlight">
+₱${share}
+</td>
+
+
+<td class="highlight">
+${percent}%
+</td>
+
+
+<td class="highlight">
+₱${salary}
+</td>
+
+
+</tr>
+
+</table>
+
+</div>
+
+`;
+
+}
+
+// loadSalary();
+
+function searchSalary(){
+
+  let keyword = document.getElementById("searchSalary").value.toLowerCase();
+
+  let html = "";
+
+  window.salaryData.forEach(function(item){
+
+    if(!String(item.agentId).toLowerCase().includes(keyword)){
+      return;
+    }
+
+    html += `
+
+<div class="game-box">
+
+<div class="game-title">
+🆔 AGENT ID : ${item.agentId}
+</div>
+
+${createGameTable("🎮 CG", item.cgProfit, item.cgPercent, item.cgSalary)}
+${createGameTable("🎰 BINGO", item.bingoProfit, item.bingoPercent, item.bingoSalary)}
+${createGameTable("🎰 SLOTS", item.slotsProfit, item.slotsPercent, item.slotsSalary)}
+${createGameTable("🎯 MINES", item.minesProfit, item.minesPercent, item.minesSalary)}
+${createGameTable("🐉 DRAGON", item.dragonProfit, item.dragonPercent, item.dragonSalary)}
+${createGameTable("🃏 CGP", item.cgpProfit, item.cgpPercent, item.cgpSalary)}
+${createGameTable("🎴 SAKLA", item.saklaProfit, item.saklaPercent, item.saklaSalary)}
+
+<div class="salary-summary">
+
+<div class="summary-row">
+<span>💰 Profit Salary</span>
+<strong>₱${item.profitSalary}</strong>
+</div>
+
+<div class="summary-row">
+<span>🎁 Bonus</span>
+<strong>₱${item.bonus}</strong>
+</div>
+
+<div class="summary-total">
+<span>🏆 Overall Salary</span>
+<strong>₱${item.totalSalary}</strong>
+</div>
+
+</div>
+
+<button class="payroll-btn"
+onclick="showSalary('${item.agentId}','${item.totalSalary}')">
+👁 VIEW PAYROLL
+</button>
+
+</div>
+
+`;
+  });
+
+  document.getElementById("salaryTable").innerHTML = html;
+
+}
+
+function showSalary(agent, salary){
+
+  document.getElementById("salaryDetails").style.display = "block";
+
+  document.getElementById("dAgent").innerText = agent;
+
+  document.getElementById("dSalary").innerText = salary;
+
+}
+
+function loadActiveSalary(){
+
+  google.script.run
+    .withSuccessHandler(function(data){
+
+      let html = `
+
+      <table class="salary-table">
+
+        <tr>
+          <th>Agent ID</th>
+          <th>Active Players</th>
+          <th>Rate</th>
+          <th>Total Salary</th>
+        </tr>
+
+      `;
+
+      data.forEach(function(item){
+
+        html += `
+          <tr>
+            <td>${item.agentId}</td>
+            <td>${item.activePlayers}</td>
+            <td>₱${item.rate}</td>
+            <td><b>₱${item.totalSalary}</b></td>
+          </tr>
+        `;
+
+      });
+
+      html += "</table>";
+
+      document.getElementById("activeSection").innerHTML = html;
+
+    })
+.getActiveSalaryComputation(
+    sessionStorage.getItem("agentId"),
+    sessionStorage.getItem("role")
+);
+
+}
+
+</script>
+
+</body>
+</html>
+
